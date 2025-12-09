@@ -34,7 +34,7 @@ services:
     source_dir: .
     build_command: npm install && npm run build
     run_command: npm start
-    http_port: 3000
+    http_port: 8080
     instance_count: 1
     instance_size_slug: basic-xxs
     routes:
@@ -42,7 +42,7 @@ services:
     envs:
       - key: PORT
         scope: RUN_TIME
-        value: "3000"
+        value: "8080"
       - key: NEXT_PUBLIC_API_URL
         scope: RUN_AND_BUILD_TIME
         value: ${api.PUBLIC_URL}
