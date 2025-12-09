@@ -1,8 +1,9 @@
 name: winplacearena
-region: nyc
+region: ams
 
+# Backend API Service
 services:
-  - name: backend
+  - name: api
     github:
       repo: grinevoleg/winplacearena
       branch: main
@@ -24,9 +25,10 @@ services:
         value: ${arena-db.DATABASE_URL}
       - key: FRONTEND_URL
         scope: RUN_TIME
-        value: ${frontend.PUBLIC_URL}
+        value: ${web.PUBLIC_URL}
 
-  - name: frontend
+# Frontend Web Service
+  - name: web
     github:
       repo: grinevoleg/winplacearena
       branch: main
@@ -45,7 +47,7 @@ services:
         value: "8080"
       - key: NEXT_PUBLIC_API_URL
         scope: RUN_AND_BUILD_TIME
-        value: ${backend.PUBLIC_URL}
+        value: ${api.PUBLIC_URL}
 
 databases:
   - name: arena-db
