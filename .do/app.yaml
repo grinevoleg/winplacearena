@@ -15,6 +15,7 @@ services:
     instance_size_slug: basic-xxs
     health_check:
       http_path: /health
+    # API не имеет routes - доступен только через внутренний URL
     envs:
       - key: OPENAI_API_KEY
         scope: RUN_TIME
@@ -39,6 +40,7 @@ services:
     http_port: 3000
     instance_count: 1
     instance_size_slug: basic-xxs
+    # Только web сервис имеет маршрут "/" - это фронтенд
     routes:
       - path: /
     envs:
