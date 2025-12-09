@@ -1,31 +1,8 @@
 name: winplacearena
 region: ams
 
+# Frontend Web Service (включает Next.js API routes)
 services:
-  - name: api
-    github:
-      repo: grinevoleg/winplacearena
-      branch: main
-      deploy_on_push: true
-    source_dir: backend
-    dockerfile_path: backend/Dockerfile
-    http_port: 8000
-    instance_count: 1
-    instance_size_slug: basic-xxs
-    health_check:
-      http_path: /health
-    envs:
-      - key: OPENAI_API_KEY
-        scope: RUN_TIME
-        type: SECRET
-      - key: DATABASE_URL
-        scope: RUN_TIME
-        type: SECRET
-        value: ${arena-db.DATABASE_URL}
-      - key: FRONTEND_URL
-        scope: RUN_TIME
-        value: ${web.PUBLIC_URL}
-
   - name: web
     github:
       repo: grinevoleg/winplacearena
@@ -43,9 +20,6 @@ services:
       - key: PORT
         scope: RUN_TIME
         value: "8080"
-      - key: NEXT_PUBLIC_API_URL
-        scope: RUN_AND_BUILD_TIME
-        value: ${api.PUBLIC_URL}
 
 databases:
   - name: arena-db
@@ -54,4 +28,3 @@ databases:
     production: false
     db_name: arena
     db_user: arena_user
-

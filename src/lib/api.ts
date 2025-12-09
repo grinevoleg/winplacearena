@@ -1,4 +1,14 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+// Используем Next.js API routes если нет внешнего API
+const getApiBaseUrl = () => {
+  if (typeof window !== 'undefined') {
+    // В браузере используем относительный путь или переменную окружения
+    return process.env.NEXT_PUBLIC_API_URL || '/api';
+  }
+  // На сервере используем переменную окружения или localhost
+  return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+};
+
+const API_BASE_URL = getApiBaseUrl();
 
 export interface Challenge {
   id: string;
@@ -100,12 +110,12 @@ class ApiClient {
 
   async getGlobalChallenges(userId?: string): Promise<Challenge[]> {
     const params = new URLSearchParams();
-    params.append('global_only', 'true');
     if (userId) {
       params.append('user_id', userId);
     }
     
-    return this.request<Challenge[]>(`/api/challenges/?${params.toString()}`);
+    // Используем специальный endpoint для глобальных челленджей
+    return this.request<Challenge[]>(`/api/challenges/global?${params.toString()}`);
   }
 
   async getChallenge(challengeId: string): Promise<Challenge> {
