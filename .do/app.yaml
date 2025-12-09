@@ -44,7 +44,7 @@ services:
     envs:
       - key: PORT
         scope: RUN_TIME
-        value: "8080"
+        value: "3000"
       - key: NEXT_PUBLIC_API_URL
         scope: RUN_AND_BUILD_TIME
         value: ${api.PUBLIC_URL}
