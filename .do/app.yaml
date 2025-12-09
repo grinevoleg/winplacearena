@@ -41,7 +41,7 @@ services:
       - path: /
     envs:
       - key: NEXT_PUBLIC_API_URL
-        scope: RUN_TIME
+        scope: RUN_AND_BUILD_TIME
         value: ${backend.PUBLIC_URL}
 
 databases:
