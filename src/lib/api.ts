@@ -1,16 +1,9 @@
 // Используем Next.js API routes если нет внешнего API
-const getApiBaseUrl = () => {
-  if (typeof window !== 'undefined') {
-    // В браузере используем относительный путь или переменную окружения
-    const envUrl = typeof process !== 'undefined' && process.env?.NEXT_PUBLIC_API_URL;
-    return envUrl || '/api';
-  }
-  // На сервере используем переменную окружения или localhost
-  const envUrl = typeof process !== 'undefined' && process.env?.NEXT_PUBLIC_API_URL;
-  return envUrl || 'http://localhost:8000';
-};
-
-const API_BASE_URL = getApiBaseUrl();
+// В Next.js process.env доступен автоматически
+const API_BASE_URL = 
+  typeof window !== 'undefined' 
+    ? (process.env.NEXT_PUBLIC_API_URL || '/api')
+    : (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000');
 
 export interface Challenge {
   id: string;
