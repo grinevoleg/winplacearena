@@ -1,7 +1,6 @@
 name: winplacearena
 region: ams
 
-# Backend API Service
 services:
   - name: api
     github:
@@ -15,7 +14,6 @@ services:
     instance_size_slug: basic-xxs
     health_check:
       http_path: /health
-    # API не имеет routes - доступен только через внутренний URL
     envs:
       - key: OPENAI_API_KEY
         scope: RUN_TIME
@@ -28,7 +26,6 @@ services:
         scope: RUN_TIME
         value: ${web.PUBLIC_URL}
 
-# Frontend Web Service
   - name: web
     github:
       repo: grinevoleg/winplacearena
@@ -40,7 +37,6 @@ services:
     http_port: 3000
     instance_count: 1
     instance_size_slug: basic-xxs
-    # Только web сервис имеет маршрут "/" - это фронтенд
     routes:
       - path: /
     envs:
