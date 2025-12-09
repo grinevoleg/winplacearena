@@ -34,12 +34,15 @@ services:
     source_dir: .
     build_command: npm install && npm run build
     run_command: node .next/standalone/server.js
-    http_port: 3000
+    http_port: 8080
     instance_count: 1
     instance_size_slug: basic-xxs
     routes:
       - path: /
     envs:
+      - key: PORT
+        scope: RUN_TIME
+        value: "8080"
       - key: NEXT_PUBLIC_API_URL
         scope: RUN_AND_BUILD_TIME
         value: ${backend.PUBLIC_URL}
