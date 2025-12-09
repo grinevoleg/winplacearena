@@ -35,8 +35,8 @@ services:
       deploy_on_push: true
     source_dir: .
     build_command: npm install && npm run build
-    run_command: node .next/standalone/server.js
-    http_port: 8080
+    run_command: npm start
+    http_port: 3000
     instance_count: 1
     instance_size_slug: basic-xxs
     routes:
