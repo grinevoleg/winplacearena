@@ -2,10 +2,12 @@
 const getApiBaseUrl = () => {
   if (typeof window !== 'undefined') {
     // В браузере используем относительный путь или переменную окружения
-    return process.env.NEXT_PUBLIC_API_URL || '/api';
+    const envUrl = typeof process !== 'undefined' && process.env?.NEXT_PUBLIC_API_URL;
+    return envUrl || '/api';
   }
   // На сервере используем переменную окружения или localhost
-  return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+  const envUrl = typeof process !== 'undefined' && process.env?.NEXT_PUBLIC_API_URL;
+  return envUrl || 'http://localhost:8000';
 };
 
 const API_BASE_URL = getApiBaseUrl();
