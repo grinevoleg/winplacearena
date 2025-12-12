@@ -45,9 +45,6 @@ const nextConfig: NextConfig = {
   // Убеждаемся, что production сборка работает правильно
   reactStrictMode: true,
   
-  // Отключаем оптимизации, которые могут вызывать проблемы
-  swcMinify: true,
-  
   // Явно указываем hostname для production
   // Это важно для работы на DigitalOcean
   ...(process.env.NODE_ENV === 'production' && {
