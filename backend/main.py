@@ -47,10 +47,11 @@ app.include_router(leaderboard.router, prefix="/api/leaderboard", tags=["leaderb
 app.include_router(ai.router, prefix="/api/ai", tags=["ai"])
 
 # Статические файлы фронтенда
-# Ищем фронтенд в родительской директории или в текущей
-frontend_path = Path(__file__).parent.parent / "frontend"
+# В Docker контейнере фронтенд находится в /app/frontend
+frontend_path = Path(__file__).parent / "frontend"
 if not frontend_path.exists():
-    frontend_path = Path(__file__).parent / "frontend"
+    # Fallback: ищем в родительской директории (для локальной разработки)
+    frontend_path = Path(__file__).parent.parent / "frontend"
 if frontend_path.exists():
     # Раздаем статические файлы (CSS, JS, изображения)
     # Используем общий путь /static для всех файлов из frontend
