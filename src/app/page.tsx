@@ -142,10 +142,16 @@ export default function Home() {
                 </div>
                 <div className="flex items-center gap-2">
                   <Button
+                    type="button"
                     size="icon"
                     variant="outline"
-                    className="neon-border"
-                    onClick={() => setShowScannerQR(true)}
+                    className="neon-border relative z-10"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      console.log('QR Scanner button clicked');
+                      setShowScannerQR(true);
+                    }}
                   >
                     <QrCode className="w-5 h-5 text-purple-400" />
                   </Button>

@@ -18,21 +18,62 @@ export function QRScannerModal({ open, onOpenChange, onScanSuccess }: QRScannerM
   const [hasCamera, setHasCamera] = useState(true);
   const scannerRef = useRef<Html5Qrcode | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (open && !scannerRef.current) {
-      scannerRef.current = new Html5Qrcode("qr-reader");
+    if (!open) {
+      // Cleanup when modal closes
+      if (scannerRef.current) {
+        scannerRef.current.stop().catch(() => {
+          // Ignore errors during cleanup
+        }).finally(() => {
+          scannerRef.current = null;
+        });
+      }
+      setScanning(false);
+      return;
     }
 
+    // Initialize scanner only when modal is open and element exists
+    const initializeScanner = () => {
+      const qrReaderElement = document.getElementById("qr-reader");
+      if (qrReaderElement && !scannerRef.current) {
+        try {
+          scannerRef.current = new Html5Qrcode("qr-reader");
+        } catch (error) {
+          console.error("Failed to initialize QR scanner:", error);
+        }
+      }
+    };
+
+    // Use requestAnimationFrame to ensure DOM is ready
+    const rafId = requestAnimationFrame(() => {
+      setTimeout(initializeScanner, 50);
+    });
+
     return () => {
+      cancelAnimationFrame(rafId);
       if (scannerRef.current?.isScanning) {
-        scannerRef.current.stop().catch(console.error);
+        scannerRef.current.stop().catch(() => {
+          // Ignore errors during cleanup
+        }).finally(() => {
+          scannerRef.current = null;
+        });
       }
     };
   }, [open]);
 
   const startScanning = async () => {
-    if (!scannerRef.current) return;
+    if (!scannerRef.current) {
+      // Try to initialize if not already done
+      try {
+        scannerRef.current = new Html5Qrcode("qr-reader");
+      } catch (error) {
+        console.error("Failed to initialize scanner:", error);
+        toast.error("Не удалось инициализировать сканер");
+        return;
+      }
+    }
 
     try {
       setScanning(true);
@@ -64,7 +105,10 @@ export function QRScannerModal({ open, onOpenChange, onScanSuccess }: QRScannerM
         setScanning(false);
       } catch (err) {
         console.error("Error stopping scanner:", err);
+        setScanning(false);
       }
+    } else {
+      setScanning(false);
     }
   };
 
@@ -76,7 +120,18 @@ export function QRScannerModal({ open, onOpenChange, onScanSuccess }: QRScannerM
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (!file || !scannerRef.current) return;
+    if (!file) return;
+
+    // Initialize scanner if not already done
+    if (!scannerRef.current) {
+      try {
+        scannerRef.current = new Html5Qrcode("qr-reader");
+      } catch (error) {
+        console.error("Failed to initialize scanner:", error);
+        toast.error("Не удалось инициализировать сканер");
+        return;
+      }
+    }
 
     try {
       const decodedText = await scannerRef.current.scanFile(file, false);
@@ -87,8 +142,8 @@ export function QRScannerModal({ open, onOpenChange, onScanSuccess }: QRScannerM
     }
   };
 
-  const handleClose = () => {
-    stopScanning();
+  const handleClose = async () => {
+    await stopScanning();
     onOpenChange(false);
   };
 
@@ -106,13 +161,15 @@ export function QRScannerModal({ open, onOpenChange, onScanSuccess }: QRScannerM
 
         <div className="space-y-4">
           {/* Scanner View */}
-          <div 
-            id="qr-reader" 
-            className={`w-full rounded-lg overflow-hidden border-2 border-purple-500/30 ${
-              scanning ? 'block' : 'hidden'
-            }`}
-            style={{ minHeight: '300px' }}
-          />
+          <div ref={containerRef}>
+            <div 
+              id="qr-reader" 
+              className={`w-full rounded-lg overflow-hidden border-2 border-purple-500/30 ${
+                scanning ? 'block' : 'hidden'
+              }`}
+              style={{ minHeight: '300px' }}
+            />
+          </div>
 
           {/* Instructions when not scanning */}
           {!scanning && (
