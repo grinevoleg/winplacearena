@@ -1,9 +1,18 @@
 // Используем Next.js API routes если нет внешнего API
 // В Next.js process.env доступен автоматически
-const API_BASE_URL = 
-  typeof window !== 'undefined' 
-    ? (process.env.NEXT_PUBLIC_API_URL || '/api')
-    : (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000');
+const getApiBaseUrl = () => {
+  const envUrl = process.env.NEXT_PUBLIC_API_URL;
+  
+  if (envUrl) {
+    return envUrl; // Используем как есть, если указан явно
+  }
+  
+  // Если не указан, используем пустую строку для браузера (относительные пути)
+  // или localhost для сервера
+  return typeof window !== 'undefined' ? '' : 'http://localhost:8000';
+};
+
+const API_BASE_URL = getApiBaseUrl();
 
 export interface Challenge {
   id: string;
@@ -53,7 +62,15 @@ class ApiClient {
     endpoint: string,
     options: RequestInit = {}
   ): Promise<T> {
-    const url = `${this.baseUrl}${endpoint}`;
+    // Если baseUrl пустой, добавляем /api к endpoint
+    // Если baseUrl указан, используем его как есть
+    let url: string;
+    if (this.baseUrl) {
+      url = `${this.baseUrl}${endpoint.startsWith('/') ? endpoint : '/' + endpoint}`;
+    } else {
+      // baseUrl пустой - используем относительный путь с /api
+      url = endpoint.startsWith('/api') ? endpoint : `/api${endpoint.startsWith('/') ? endpoint : '/' + endpoint}`;
+    }
     
     try {
       const response = await fetch(url, {
@@ -100,7 +117,7 @@ class ApiClient {
     if (userId) params.append('user_id', userId);
     if (filterType) params.append('filter_type', filterType);
     
-    return this.request<Challenge[]>(`/api/challenges/?${params.toString()}`);
+    return this.request<Challenge[]>(`/challenges/?${params.toString()}`);
   }
 
   async getGlobalChallenges(userId?: string): Promise<Challenge[]> {
@@ -110,15 +127,15 @@ class ApiClient {
     }
     
     // Используем специальный endpoint для глобальных челленджей
-    return this.request<Challenge[]>(`/api/challenges/global?${params.toString()}`);
+    return this.request<Challenge[]>(`/challenges/global?${params.toString()}`);
   }
 
   async getChallenge(challengeId: string): Promise<Challenge> {
-    return this.request<Challenge>(`/api/challenges/${challengeId}`);
+    return this.request<Challenge>(`/challenges/${challengeId}`);
   }
 
   async createChallenge(challenge: Omit<Challenge, 'id' | 'completed'>): Promise<Challenge> {
-    return this.request<Challenge>('/api/challenges/', {
+    return this.request<Challenge>('/challenges/', {
       method: 'POST',
       body: JSON.stringify({
         title: challenge.title,
@@ -134,7 +151,7 @@ class ApiClient {
   }
 
   async assignChallenge(challengeId: string, userId: string): Promise<void> {
-    await this.request(`/api/challenges/${challengeId}/assign?user_id=${userId}`, {
+    await this.request(`/challenges/${challengeId}/assign?user_id=${userId}`, {
       method: 'POST',
     });
   }
@@ -147,18 +164,18 @@ class ApiClient {
       can_publish: boolean;
     };
   }> {
-    return this.request(`/api/challenges/${challengeId}/toggle?user_id=${userId}`, {
+    return this.request(`/challenges/${challengeId}/toggle?user_id=${userId}`, {
       method: 'PUT',
     });
   }
 
   // Users
   async getUser(userId: string): Promise<UserProfile> {
-    return this.request<UserProfile>(`/api/users/${userId}`);
+    return this.request<UserProfile>(`/users/${userId}`);
   }
 
   async createUser(user: { id: string; name: string }): Promise<UserProfile> {
-    return this.request<UserProfile>('/api/users/', {
+    return this.request<UserProfile>('/users/', {
       method: 'POST',
       body: JSON.stringify(user),
     });
@@ -168,14 +185,14 @@ class ApiClient {
     const params = new URLSearchParams();
     if (name) params.append('name', name);
     
-    return this.request<UserProfile>(`/api/users/${userId}?${params.toString()}`, {
+    return this.request<UserProfile>(`/users/${userId}?${params.toString()}`, {
       method: 'PUT',
     });
   }
 
   // Leaderboard
   async getLeaderboard(): Promise<LeaderboardEntry[]> {
-    return this.request<LeaderboardEntry[]>('/api/leaderboard/');
+    return this.request<LeaderboardEntry[]>('/leaderboard/');
   }
 
   // AI
@@ -185,7 +202,7 @@ class ApiClient {
     difficulty: string;
     stars: number;
   }> {
-    return this.request('/api/ai/generate-challenge', {
+    return this.request('/ai/generate-challenge', {
       method: 'POST',
       body: JSON.stringify(request),
     });
