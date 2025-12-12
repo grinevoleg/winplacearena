@@ -52,3 +52,4 @@ async def update_user(user_id: str, name: Optional[str] = None, db: Session = De
     
     return user
 
+

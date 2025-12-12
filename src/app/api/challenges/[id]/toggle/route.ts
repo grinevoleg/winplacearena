@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 declare global {
   var userChallenges: any[];
   var users: any[];
+  var challenges: any[];
 }
 
 if (!global.userChallenges) {
@@ -11,15 +12,22 @@ if (!global.userChallenges) {
 if (!global.users) {
   global.users = [{ id: 'user1', name: 'Challenger', completedChallenges: 0, totalStars: 0, canPublish: false }];
 }
+if (!global.challenges) {
+  global.challenges = [];
+}
 
 const userChallenges = global.userChallenges;
 const users = global.users;
+const challenges = global.challenges;
 
 export async function PUT(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
+    // Инициализируем глобальные челленджи если нужно
+    initGlobalChallengesIfNeeded();
+    
     const challengeId = params.id;
     const searchParams = request.nextUrl.searchParams;
     const userId = searchParams.get('user_id') || 'user1';

@@ -105,3 +105,4 @@ logging.basicConfig(level=logging.DEBUG)
 2. Проверьте раздел "Environment Variables"
 3. Убедитесь, что все переменные установлены
 
+

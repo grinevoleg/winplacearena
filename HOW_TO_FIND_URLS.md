@@ -71,3 +71,4 @@ curl https://your-backend-url.ondigitalocean.app/health
 3. Если сервис еще деплоится, подождите завершения
 4. Проверьте логи, если есть ошибки
 
+

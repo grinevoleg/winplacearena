@@ -57,3 +57,4 @@
 - Backend использует `source_dir: backend`
 - Frontend использует `source_dir: .` (корень)
 
+

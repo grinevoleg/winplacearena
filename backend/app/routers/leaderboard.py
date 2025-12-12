@@ -54,3 +54,4 @@ async def get_leaderboard(db: Session = Depends(get_db)):
     
     return leaderboard
 
+

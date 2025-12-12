@@ -58,3 +58,4 @@ class UserChallenge(Base):
         {"sqlite_autoincrement": True},
     )
 
+

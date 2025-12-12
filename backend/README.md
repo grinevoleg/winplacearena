@@ -93,3 +93,4 @@ backend/
 - `challenges` - челленджи
 - `user_challenges` - связь пользователей и челленджей
 
+
