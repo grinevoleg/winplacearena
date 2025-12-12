@@ -15,7 +15,7 @@ if (!global.userChallenges) {
 const challenges = global.challenges;
 const userChallenges = global.userChallenges;
 
-// Инициализируем глобальные челленджи при первом запросе
+// Initialize global challenges on first request
 const initGlobalChallenges = () => {
   if (challenges.length === 0) {
     const now = Date.now();
@@ -91,10 +91,10 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
     const userId = searchParams.get('user_id') || 'user1';
     
-    // Получаем только глобальные челленджи
+    // Get only global challenges
     const globalChallengesList = challenges.filter(c => c.is_global);
     
-    // Добавляем статус completed для пользователя
+    // Add completed status for user
     const result = globalChallengesList.map(challenge => {
       const uc = userChallenges.find(
         u => u.userId === userId && u.challengeId === challenge.id

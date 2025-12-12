@@ -70,7 +70,7 @@ export function QRScannerModal({ open, onOpenChange, onScanSuccess }: QRScannerM
         scannerRef.current = new Html5Qrcode("qr-reader");
       } catch (error) {
         console.error("Failed to initialize scanner:", error);
-        toast.error("Не удалось инициализировать сканер");
+        toast.error("Failed to initialize scanner");
         return;
       }
     }
@@ -94,7 +94,7 @@ export function QRScannerModal({ open, onOpenChange, onScanSuccess }: QRScannerM
       console.error("Scanner error:", err);
       setHasCamera(false);
       setScanning(false);
-      toast.error("Не удалось получить доступ к камере");
+      toast.error("Failed to access camera");
     }
   };
 
@@ -128,7 +128,7 @@ export function QRScannerModal({ open, onOpenChange, onScanSuccess }: QRScannerM
         scannerRef.current = new Html5Qrcode("qr-reader");
       } catch (error) {
         console.error("Failed to initialize scanner:", error);
-        toast.error("Не удалось инициализировать сканер");
+        toast.error("Failed to initialize scanner");
         return;
       }
     }
@@ -138,7 +138,7 @@ export function QRScannerModal({ open, onOpenChange, onScanSuccess }: QRScannerM
       handleScanSuccess(decodedText);
     } catch (err) {
       console.error("Error scanning file:", err);
-      toast.error("Не удалось отсканировать QR-код с изображения");
+      toast.error("Failed to scan QR code from image");
     }
   };
 
@@ -152,10 +152,10 @@ export function QRScannerModal({ open, onOpenChange, onScanSuccess }: QRScannerM
       <DialogContent className="sm:max-w-md glass-card neon-border">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold">
-            <span className="neon-gradient-text">Сканировать QR-код</span>
+            <span className="neon-gradient-text">Scan QR Code</span>
           </DialogTitle>
           <DialogDescription>
-            Отсканируйте QR-код участника или челленджа
+            Scan a participant or challenge QR code
           </DialogDescription>
         </DialogHeader>
 
@@ -178,7 +178,7 @@ export function QRScannerModal({ open, onOpenChange, onScanSuccess }: QRScannerM
                 <Camera className="w-10 h-10 text-purple-400" />
               </div>
               <p className="text-muted-foreground text-sm">
-                Используйте камеру или загрузите изображение с QR-кодом
+                Use camera or upload an image with QR code
               </p>
             </div>
           )}
@@ -193,7 +193,7 @@ export function QRScannerModal({ open, onOpenChange, onScanSuccess }: QRScannerM
                     className="neon-gradient text-white hover:opacity-90"
                   >
                     <Camera className="w-4 h-4 mr-2" />
-                    Камера
+                    Camera
                   </Button>
                 )}
                 <Button
@@ -202,7 +202,7 @@ export function QRScannerModal({ open, onOpenChange, onScanSuccess }: QRScannerM
                   className={hasCamera ? "" : "col-span-2"}
                 >
                   <Upload className="w-4 h-4 mr-2" />
-                  Загрузить
+                  Upload
                 </Button>
                 <input
                   ref={fileInputRef}
@@ -219,7 +219,7 @@ export function QRScannerModal({ open, onOpenChange, onScanSuccess }: QRScannerM
                 className="col-span-2"
               >
                 <X className="w-4 h-4 mr-2" />
-                Остановить
+                Stop
               </Button>
             )}
           </div>

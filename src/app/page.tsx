@@ -91,7 +91,7 @@ export default function Home() {
         // Check if challenge already exists
         const exists = challenges.find(c => c.id === parsed.id);
         if (exists) {
-          toast.info('У вас уже есть этот челлендж!');
+          toast.info('You already have this challenge!');
           return;
         }
 
@@ -99,23 +99,23 @@ export default function Home() {
         try {
           await apiClient.assignChallenge(parsed.id, profile.id);
           await loadChallenges(filterTab === 'all' ? undefined : filterTab);
-          toast.success(`Челлендж "${parsed.title}" добавлен! 🎉`);
+          toast.success(`Challenge "${parsed.title}" added! 🎉`);
         } catch (error: any) {
           if (error.message?.includes('already assigned')) {
-            toast.info('У вас уже есть этот челлендж!');
+            toast.info('You already have this challenge!');
           } else {
             throw error;
           }
         }
       } else if (parsed.type === 'profile') {
         // Show profile information
-        toast.success(`Профиль участника: ${parsed.name}\n⭐ ${parsed.totalStars} звезд\n✅ ${parsed.completedChallenges} выполнено`);
+        toast.success(`Participant profile: ${parsed.name}\n⭐ ${parsed.totalStars} stars\n✅ ${parsed.completedChallenges} completed`);
       } else {
-        toast.error('Неизвестный тип QR-кода');
+        toast.error('Unknown QR code type');
       }
     } catch (err) {
       console.error('Error parsing QR data:', err);
-      toast.error('Не удалось прочитать QR-код');
+      toast.error('Failed to read QR code');
     }
   };
 
@@ -182,7 +182,7 @@ export default function Home() {
               {loading ? (
                 <div className="text-center py-12">
                   <Loader2 className="w-8 h-8 mx-auto animate-spin text-purple-400" />
-                  <p className="text-muted-foreground mt-4">Загрузка...</p>
+                  <p className="text-muted-foreground mt-4">Loading...</p>
                 </div>
               ) : filteredChallenges.length === 0 ? (
                 <div className="text-center py-12 space-y-4">

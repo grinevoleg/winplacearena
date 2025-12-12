@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
     const userId = searchParams.get('user_id') || 'user1';
     const filterType = searchParams.get('filter_type');
     
-    // Получаем челленджи пользователя
+    // Get user challenges
     const userChallengeIds = userChallenges
       .filter(uc => uc.userId === userId)
       .map(uc => uc.challengeId);
@@ -43,7 +43,7 @@ export async function GET(request: NextRequest) {
         };
       });
     
-    // Фильтрация
+    // Filtering
     if (filterType === 'active') {
       result = result.filter(c => !c.completed);
     } else if (filterType === 'completed') {

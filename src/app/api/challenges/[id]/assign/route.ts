@@ -19,7 +19,7 @@ export async function POST(
     const searchParams = request.nextUrl.searchParams;
     const userId = searchParams.get('user_id') || 'user1';
     
-    // Проверяем, не назначен ли уже
+    // Check if already assigned
     const exists = userChallenges.find(
       u => u.userId === userId && u.challengeId === challengeId
     );
@@ -31,7 +31,7 @@ export async function POST(
       );
     }
     
-    // Назначаем челлендж
+    // Assign challenge
     userChallenges.push({
       userId,
       challengeId,

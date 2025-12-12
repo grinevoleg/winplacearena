@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const difficulty = body.difficulty || 'medium';
     
-    // Фильтруем по сложности если указана
+    // Filter by difficulty if specified
     const filtered = difficulty 
       ? fallbackChallenges.filter(c => c.difficulty === difficulty)
       : fallbackChallenges;

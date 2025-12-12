@@ -23,7 +23,7 @@ export function useApi() {
       setProfile(user);
     } catch (error) {
       console.error('Failed to initialize user:', error);
-      toast.error('Не удалось загрузить профиль');
+      toast.error('Failed to load profile');
     }
   }, []);
 
@@ -41,7 +41,7 @@ export function useApi() {
       })));
     } catch (error) {
       console.error('Failed to load challenges:', error);
-      toast.error('Не удалось загрузить челленджи');
+      toast.error('Failed to load challenges');
     } finally {
       setLoading(false);
     }
@@ -68,7 +68,7 @@ export function useApi() {
       setCompletedGlobalChallenges(completed);
     } catch (error) {
       console.error('Failed to load global challenges:', error);
-      toast.error('Не удалось загрузить глобальные челленджи');
+      toast.error('Failed to load global challenges');
     } finally {
       setLoading(false);
     }
@@ -82,7 +82,7 @@ export function useApi() {
       setLeaderboard(data);
     } catch (error) {
       console.error('Failed to load leaderboard:', error);
-      toast.error('Не удалось загрузить таблицу лидеров');
+      toast.error('Failed to load leaderboard');
     } finally {
       setLoading(false);
     }
@@ -106,10 +106,10 @@ export function useApi() {
         c.id === challengeId ? { ...c, completed: result.completed } : c
       ));
       
-      toast.success(result.completed ? 'Челлендж выполнен! ⭐' : 'Челлендж отменен');
+      toast.success(result.completed ? 'Challenge completed! ⭐' : 'Challenge cancelled');
     } catch (error) {
       console.error('Failed to toggle challenge:', error);
-      toast.error('Не удалось обновить статус челленджа');
+      toast.error('Failed to update challenge status');
     }
   }, [profile]);
 
@@ -146,10 +146,10 @@ export function useApi() {
       // Reload global challenges to get updated stats
       await loadGlobalChallenges();
       
-      toast.success(result.completed ? 'Глобальный челлендж выполнен! ⭐' : 'Челлендж отменен');
+      toast.success(result.completed ? 'Global challenge completed! ⭐' : 'Challenge cancelled');
     } catch (error) {
       console.error('Failed to toggle global challenge:', error);
-      toast.error('Не удалось обновить статус челленджа');
+      toast.error('Failed to update challenge status');
     }
   }, [profile, loadGlobalChallenges]);
 
@@ -166,11 +166,11 @@ export function useApi() {
       // Reload challenges
       await loadChallenges();
       
-      toast.success('Челлендж создан! 🎉');
+      toast.success('Challenge created! 🎉');
       return newChallenge;
     } catch (error) {
       console.error('Failed to create challenge:', error);
-      toast.error('Не удалось создать челлендж');
+      toast.error('Failed to create challenge');
       throw error;
     }
   }, [profile, loadChallenges]);

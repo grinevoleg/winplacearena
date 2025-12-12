@@ -20,7 +20,7 @@ export async function GET(
     let user = users.find(u => u.id === userId);
     
     if (!user) {
-      // Создаем пользователя по умолчанию
+      // Create default user
       user = {
         id: userId,
         name: 'Challenger',

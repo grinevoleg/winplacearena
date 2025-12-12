@@ -17,7 +17,7 @@ const userChallenges = global.userChallenges;
 
 export async function GET() {
   try {
-    // Подсчитываем выполненные челленджи для каждого пользователя
+    // Count completed challenges for each user
     const completedCounts: Record<string, number> = {};
     
     userChallenges.forEach(uc => {
@@ -26,7 +26,7 @@ export async function GET() {
       }
     });
     
-    // Создаем записи лидерборда
+    // Create leaderboard entries
     const leaderboard = Object.entries(completedCounts)
       .map(([userId, count], index) => {
         const user = users.find(u => u.id === userId) || {

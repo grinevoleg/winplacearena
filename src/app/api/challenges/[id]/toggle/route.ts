@@ -25,14 +25,14 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
-    // Инициализируем глобальные челленджи если нужно
+    // Initialize global challenges if needed
     initGlobalChallengesIfNeeded();
     
     const challengeId = params.id;
     const searchParams = request.nextUrl.searchParams;
     const userId = searchParams.get('user_id') || 'user1';
     
-    // Находим или создаем userChallenge
+    // Find or create userChallenge
     let uc = userChallenges.find(
       u => u.userId === userId && u.challengeId === challengeId
     );
@@ -42,17 +42,17 @@ export async function PUT(
       userChallenges.push(uc);
     }
     
-    // Переключаем статус
+    // Toggle status
     uc.completed = !uc.completed;
     
-    // Обновляем статистику пользователя
+    // Update user statistics
     let user = users.find(u => u.id === userId);
     if (!user) {
       user = { id: userId, name: 'Challenger', completedChallenges: 0, totalStars: 0, canPublish: false };
       users.push(user);
     }
     
-    // Получаем stars из challenge
+    // Get stars from challenge
     const challenge = challenges.find(c => c.id === challengeId);
     const stars = challenge?.stars || 5;
     

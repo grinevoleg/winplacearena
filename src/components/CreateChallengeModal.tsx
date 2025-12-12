@@ -40,7 +40,7 @@ export function CreateChallengeModal({ open, onOpenChange, onCreateChallenge }: 
       setDuration("7");
     } catch (error) {
       console.error('Failed to generate AI challenge:', error);
-      toast.error('Не удалось сгенерировать челлендж');
+      toast.error('Failed to generate challenge');
     } finally {
       setIsGenerating(false);
     }

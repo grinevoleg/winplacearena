@@ -1,14 +1,14 @@
-// Используем Next.js API routes если нет внешнего API
-// В Next.js process.env доступен автоматически
+// Use Next.js API routes if no external API
+// In Next.js process.env is available automatically
 const getApiBaseUrl = () => {
   const envUrl = process.env.NEXT_PUBLIC_API_URL;
   
   if (envUrl) {
-    return envUrl; // Используем как есть, если указан явно
+    return envUrl; // Use as is if explicitly specified
   }
   
-  // Если не указан, используем пустую строку для браузера (относительные пути)
-  // или localhost для сервера
+  // If not specified, use empty string for browser (relative paths)
+  // or localhost for server
   return typeof window !== 'undefined' ? '' : 'http://localhost:8000';
 };
 
@@ -62,13 +62,13 @@ class ApiClient {
     endpoint: string,
     options: RequestInit = {}
   ): Promise<T> {
-    // Если baseUrl пустой, добавляем /api к endpoint
-    // Если baseUrl указан, используем его как есть
+    // If baseUrl is empty, add /api to endpoint
+    // If baseUrl is specified, use it as is
     let url: string;
     if (this.baseUrl) {
       url = `${this.baseUrl}${endpoint.startsWith('/') ? endpoint : '/' + endpoint}`;
     } else {
-      // baseUrl пустой - используем относительный путь с /api
+      // baseUrl is empty - use relative path with /api
       url = endpoint.startsWith('/api') ? endpoint : `/api${endpoint.startsWith('/') ? endpoint : '/' + endpoint}`;
     }
     
@@ -105,7 +105,7 @@ class ApiClient {
     } catch (error) {
       if (error instanceof TypeError && error.message.includes('fetch')) {
         console.error(`Network error: Cannot connect to ${url}`);
-        throw new Error(`Не удалось подключиться к серверу. Проверьте, что бэкенд запущен на ${this.baseUrl}`);
+        throw new Error(`Failed to connect to server. Make sure backend is running on ${this.baseUrl}`);
       }
       throw error;
     }
@@ -126,7 +126,7 @@ class ApiClient {
       params.append('user_id', userId);
     }
     
-    // Используем специальный endpoint для глобальных челленджей
+    // Use special endpoint for global challenges
     return this.request<Challenge[]>(`/challenges/global?${params.toString()}`);
   }
 
