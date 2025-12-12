@@ -3,13 +3,13 @@ FROM python:3.11-slim
 WORKDIR /app
 
 # Install dependencies
-COPY requirements.txt .
+COPY backend/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy backend application code
-COPY . .
+COPY backend/ .
 
-# Copy frontend files (скопированы через build_command)
+# Copy frontend files (при source_dir: . фронтенд доступен в корне)
 COPY frontend ./frontend
 
 # Expose port
