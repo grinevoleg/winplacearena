@@ -47,11 +47,11 @@ app.include_router(leaderboard.router, prefix="/api/leaderboard", tags=["leaderb
 app.include_router(ai.router, prefix="/api/ai", tags=["ai"])
 
 # Статические файлы фронтенда
-# В Docker контейнере фронтенд находится в /app/frontend
-frontend_path = Path(__file__).parent / "frontend"
+# При source_dir: backend фронтенд находится в родительской директории
+frontend_path = Path(__file__).parent.parent / "frontend"
 if not frontend_path.exists():
-    # Fallback: ищем в родительской директории (для локальной разработки)
-    frontend_path = Path(__file__).parent.parent / "frontend"
+    # Fallback: ищем в текущей директории
+    frontend_path = Path(__file__).parent / "frontend"
 
 print(f"[DEBUG] Looking for frontend at: {frontend_path}")
 print(f"[DEBUG] Frontend exists: {frontend_path.exists()}")
