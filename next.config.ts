@@ -4,17 +4,6 @@ import path from "node:path";
 const LOADER = path.resolve(__dirname, 'src/visual-edits/component-tagger-loader.js');
 
 const nextConfig: NextConfig = {
-  // Для DigitalOcean App Platform используем стандартный режим (next start)
-  // output: 'standalone', // Используется только для Docker
-  
-  // Явно указываем, что используем src директорию
-  // Next.js автоматически определит это, но лучше быть явным
-  
-  // Убеждаемся, что Next.js правильно обрабатывает app directory
-  experimental: {
-    // Отключаем экспериментальные функции, которые могут вызывать проблемы
-  },
-  
   images: {
     remotePatterns: [
       {
@@ -36,7 +25,7 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
   
-  // Turbopack только для dev режима, не нужен в production
+  // Turbopack только для dev режима
   ...(process.env.NODE_ENV === 'development' && {
     turbopack: {
       rules: {
@@ -47,15 +36,7 @@ const nextConfig: NextConfig = {
     }
   }),
   
-  // Убеждаемся, что production сборка работает правильно
   reactStrictMode: true,
-  
-  // Явно указываем hostname для production
-  // Это важно для работы на DigitalOcean
-  ...(process.env.NODE_ENV === 'production' && {
-    // Убеждаемся, что Next.js правильно обрабатывает запросы
-    poweredByHeader: false,
-  }),
 };
 
 export default nextConfig;
