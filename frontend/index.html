@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Win Place Arena</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="app">
+        <!-- Header -->
+        <header class="header">
+            <h1 class="logo">
+                <span class="logo-win">Win</span>
+                <span class="logo-place">Place</span>
+                <span class="logo-arena">Arena</span>
+            </h1>
+            <div class="header-actions">
+                <button class="btn-icon" id="qrScannerBtn" title="Scan QR">
+                    📷
+                </button>
+                <div class="stars-badge" id="starsBadge">0 ⭐</div>
+            </div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <div class="tabs" id="mainTabs">
+            <button class="tab-btn active" data-tab="home">Home</button>
+            <button class="tab-btn" data-tab="arena">Arena</button>
+            <button class="tab-btn" data-tab="profile">Profile</button>
+        </div>
+
+        <!-- Filter Tabs (only on home) -->
+        <div class="filter-tabs" id="filterTabs">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="active">Active</button>
+            <button class="filter-btn" data-filter="completed">Done</button>
+        </div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Home Tab -->
+            <div class="tab-content active" id="homeTab">
+                <div id="challengesList" class="challenges-list">
+                    <div class="loading">Loading...</div>
+                </div>
+            </div>
+
+            <!-- Arena Tab -->
+            <div class="tab-content" id="arenaTab">
+                <div id="arenaContent" class="arena-content">
+                    <div class="loading">Loading...</div>
+                </div>
+            </div>
+
+            <!-- Profile Tab -->
+            <div class="tab-content" id="profileTab">
+                <div id="profileContent" class="profile-content">
+                    <div class="loading">Loading...</div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <button class="nav-btn active" data-nav="home">🏠</button>
+            <button class="nav-btn" data-nav="create">➕</button>
+            <button class="nav-btn" data-nav="arena">⚔️</button>
+            <button class="nav-btn" data-nav="profile">👤</button>
+        </nav>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal" id="createModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Create Challenge</h2>
+                <button class="modal-close" id="closeCreateModal">×</button>
+            </div>
+            <form id="createChallengeForm">
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" id="challengeTitle" required>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="challengeDescription" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Difficulty</label>
+                    <select id="challengeDifficulty" required>
+                        <option value="easy">Easy</option>
+                        <option value="medium">Medium</option>
+                        <option value="hard">Hard</option>
+                        <option value="extreme">Extreme</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Stars</label>
+                    <input type="number" id="challengeStars" min="1" max="10" value="1" required>
+                </div>
+                <div class="form-group">
+                    <label>Deadline</label>
+                    <input type="date" id="challengeDeadline" required>
+                </div>
+                <button type="submit" class="btn-primary">Create</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="qrModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>QR Code</h2>
+                <button class="modal-close" id="closeQRModal">×</button>
+            </div>
+            <div id="qrCodeContainer"></div>
+        </div>
+    </div>
+
+    <div class="modal" id="qrScannerModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Scan QR Code</h2>
+                <button class="modal-close" id="closeScannerModal">×</button>
+            </div>
+            <div id="scannerContainer">
+                <p>QR Scanner will be here</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/api.js"></script>
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
+

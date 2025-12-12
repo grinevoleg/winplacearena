@@ -1,8 +1,11 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from contextlib import asynccontextmanager
 import uvicorn
 import os
+from pathlib import Path
 
 from app.database import init_db
 from app.routers import challenges, users, leaderboard, ai
@@ -28,20 +31,10 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# CORS middleware
-allowed_origins = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-]
-
-# Add production frontend URL if set
-frontend_url = os.getenv("FRONTEND_URL")
-if frontend_url:
-    allowed_origins.append(frontend_url)
-
+# CORS middleware - разрешаем все для упрощения
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=allowed_origins,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -53,9 +46,32 @@ app.include_router(users.router, prefix="/api/users", tags=["users"])
 app.include_router(leaderboard.router, prefix="/api/leaderboard", tags=["leaderboard"])
 app.include_router(ai.router, prefix="/api/ai", tags=["ai"])
 
-@app.get("/")
-async def root():
-    return {"message": "Win Place Arena API", "version": "1.0.0"}
+# Статические файлы фронтенда
+# Ищем фронтенд в родительской директории или в текущей
+frontend_path = Path(__file__).parent.parent / "frontend"
+if not frontend_path.exists():
+    frontend_path = Path(__file__).parent / "frontend"
+if frontend_path.exists():
+    # Раздаем статические файлы (CSS, JS, изображения)
+    # CSS и JS из поддиректорий
+    app.mount("/static/css", StaticFiles(directory=str(frontend_path / "css")), name="static-css")
+    app.mount("/static/js", StaticFiles(directory=str(frontend_path / "js")), name="static-js")
+    # Остальные статические файлы
+    static_path = frontend_path / "static"
+    if static_path.exists():
+        app.mount("/static", StaticFiles(directory=str(static_path)), name="static")
+    
+    # Главная страница - отдаем index.html
+    @app.get("/")
+    async def root():
+        index_path = frontend_path / "index.html"
+        if index_path.exists():
+            return FileResponse(str(index_path))
+        return {"message": "Win Place Arena API", "version": "1.0.0"}
+else:
+    @app.get("/")
+    async def root():
+        return {"message": "Win Place Arena API", "version": "1.0.0"}
 
 @app.get("/health")
 async def health():
