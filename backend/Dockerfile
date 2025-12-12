@@ -9,8 +9,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy backend application code
 COPY backend/ .
 
-# Copy frontend files (source_dir = корень проекта, поэтому frontend доступен)
-COPY frontend ./frontend
+# Copy frontend files (скопированы через build_command в .do/app.yaml)
+COPY backend/frontend ./frontend
 
 # Expose port
 EXPOSE 8000
