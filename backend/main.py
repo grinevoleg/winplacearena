@@ -53,13 +53,8 @@ if not frontend_path.exists():
     frontend_path = Path(__file__).parent / "frontend"
 if frontend_path.exists():
     # Раздаем статические файлы (CSS, JS, изображения)
-    # CSS и JS из поддиректорий
-    app.mount("/static/css", StaticFiles(directory=str(frontend_path / "css")), name="static-css")
-    app.mount("/static/js", StaticFiles(directory=str(frontend_path / "js")), name="static-js")
-    # Остальные статические файлы
-    static_path = frontend_path / "static"
-    if static_path.exists():
-        app.mount("/static", StaticFiles(directory=str(static_path)), name="static")
+    # Используем общий путь /static для всех файлов из frontend
+    app.mount("/static", StaticFiles(directory=str(frontend_path)), name="static")
     
     # Главная страница - отдаем index.html
     @app.get("/")
