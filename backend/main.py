@@ -52,7 +52,12 @@ frontend_path = Path(__file__).parent / "frontend"
 if not frontend_path.exists():
     # Fallback: ищем в родительской директории (для локальной разработки)
     frontend_path = Path(__file__).parent.parent / "frontend"
+
+print(f"[DEBUG] Looking for frontend at: {frontend_path}")
+print(f"[DEBUG] Frontend exists: {frontend_path.exists()}")
+
 if frontend_path.exists():
+    print(f"[DEBUG] Mounting static files from: {frontend_path}")
     # Раздаем статические файлы (CSS, JS, изображения)
     # Используем общий путь /static для всех файлов из frontend
     app.mount("/static", StaticFiles(directory=str(frontend_path)), name="static")
@@ -61,13 +66,15 @@ if frontend_path.exists():
     @app.get("/")
     async def root():
         index_path = frontend_path / "index.html"
+        print(f"[DEBUG] Serving index.html from: {index_path}")
         if index_path.exists():
             return FileResponse(str(index_path))
-        return {"message": "Win Place Arena API", "version": "1.0.0"}
+        return {"message": "Frontend path found but index.html missing", "path": str(index_path)}
 else:
+    print(f"[DEBUG] Frontend not found at: {frontend_path}")
     @app.get("/")
     async def root():
-        return {"message": "Win Place Arena API", "version": "1.0.0"}
+        return {"message": "Win Place Arena API", "version": "1.0.0", "frontend_path": str(frontend_path)}
 
 @app.get("/health")
 async def health():
